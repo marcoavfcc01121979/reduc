@@ -1,22 +1,33 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { criarNovoProdutoAction } from "../../actions/produtosActions";
 
 const NovoProduto = () => {
+    // state del componente
+    const [nombre, guardaNombre] = useState('');
+    const [precio, guardaPrecio] = useState(0);
+
     // ultilizar use dispatch e te criar uma função
     const dispatch = useDispatch();
 
     // mandar a acao do production Action
-    const guardarProduto = () => dispatch( criarNovoProdutoAction() )
+    const guardarProduto = produto => dispatch( criarNovoProdutoAction(produto) )
 
     const submitNovoProduto = e => {
         e.preventDefault();
 
         // validar formulario
+        if(nombre.trim() === '' || precio <= 0) {
+            return;
+        }
 
         // si no hay error
 
         // criar um novo produto
-        guardarProduto()
+        guardarProduto({
+            nombre,
+            precio
+        })
     }
     return(
         <div className="row justify-content-center">
@@ -36,7 +47,9 @@ const NovoProduto = () => {
                                     type="text"
                                     className="form-control"
                                     placeholder="Nome produto"
-                                    name="nome"                                    
+                                    name="nome" 
+                                    value={nombre}
+                                    onChange={e => guardaNombre(e.target.value)}                                   
                                 />
                             </div>
 
@@ -46,7 +59,9 @@ const NovoProduto = () => {
                                     type="number"
                                     className="form-control"
                                     placeholder="Preço produto"
-                                    name="preço"                                    
+                                    name="preço"                                
+                                    value={precio}
+                                    onChange={e => guardaPrecio(Number(e.target.value))}    
                                 />
                             </div>
 

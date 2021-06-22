@@ -6,8 +6,8 @@ import {
 
 
 //Criar um novo produto
-export function criarNovoProdutoAction() {
+export function criarNovoProdutoAction(produto) {
     return() => {
-        console.log('desde action')
+        console.log(produto)
     } 
 }
