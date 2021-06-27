@@ -4,7 +4,10 @@ import Swal from 'sweetalert2';
 import {
     GUARDAR_PRODUTO,
     GUARDAR_PRODUTO_ERROR,
-    GUARDAR_PRODUTO_EXITO
+    GUARDAR_PRODUTO_EXITO,
+    MOSTRAR_PRODUTO,
+    MOSTRAR_PRODUTO_EXITO,
+    MOSTRAR_PRODUTO_ERROR,
 } from '../types'
 
 
@@ -56,4 +59,38 @@ const guardarProdutoExito = produto => ({
 const guardarProdutoError = estado => ({
     type: GUARDAR_PRODUTO_ERROR,
     payload: estado
+})
+
+// Função mostrar os produtos da base de dados
+export function obterProdutosAction() {
+    return async (dispatch) => {
+        dispatch(mostrarProdutos());
+
+        try {
+            /* setTimeout(async () => {
+                const resposta = await clienteAxios.get('/productos');
+                dispatch(mostrarProdutoExito(resposta.data))
+            }, 3000) */
+            const resposta = await clienteAxios.get('/productos');
+            dispatch(mostrarProdutoExito(resposta.data))
+        } catch (error) {
+            console.log(error)
+            dispatch(mostrarProdutoError())
+        }
+    }
+}
+
+const mostrarProdutos = () => ({
+    type: MOSTRAR_PRODUTO,
+    payload: true
+})
+
+const mostrarProdutoExito = (produtos) => ({
+    type: MOSTRAR_PRODUTO_EXITO,
+    payload: produtos
+}) 
+
+const mostrarProdutoError = () => ({
+    type: MOSTRAR_PRODUTO_ERROR,
+    payload: true
 })
