@@ -8,6 +8,9 @@ import {
     MOSTRAR_PRODUTO,
     MOSTRAR_PRODUTO_EXITO,
     MOSTRAR_PRODUTO_ERROR,
+    ELIMINAR_PRODUTO,
+    ELIMINAR_PRODUTO_EXITO,
+    ELIMINAR_PRODUTO_ERROR,
 } from '../types'
 
 
@@ -92,5 +95,41 @@ const mostrarProdutoExito = (produtos) => ({
 
 const mostrarProdutoError = () => ({
     type: MOSTRAR_PRODUTO_ERROR,
+    payload: true
+})
+
+// Seleciona e eliminar produtos
+export function apagarProdutoAction(id) {
+    return async (dispatch) => {
+        dispatch(obterProdutoEliminar(id));
+
+        try {
+            await clienteAxios.delete(`/productos/${id}`);
+            dispatch(eliminarProdutoExito())
+
+            // Se sim elimina, mostrar alerta
+            Swal.fire(
+                'Deletado!',
+                'Seu arquivo foi excluído,',
+                'Sucesso'
+            )
+        } catch (error) {
+            console.log(error)
+            dispatch(eliminarProdutoError())            
+        }
+    }
+}
+
+const obterProdutoEliminar = (id) => ({
+    type: ELIMINAR_PRODUTO,
+    payload: id
+})
+
+const eliminarProdutoExito = () => ({
+    type: ELIMINAR_PRODUTO_EXITO
+})
+
+const eliminarProdutoError = () => ({
+    type: ELIMINAR_PRODUTO_ERROR,
     payload: true
 })
